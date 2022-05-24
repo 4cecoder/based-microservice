@@ -11,7 +11,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 func main() {
     port := 8080
-    serveString := ":" + string(port)
+    serveString := ":" + string(rune(port))
     http.HandleFunc("/", handler)
 
     err := http.ListenAndServe(serveString, nil)
