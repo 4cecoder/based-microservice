@@ -2,20 +2,27 @@ package static_server
 
 // serve http
 import (
-    "fmt"
-    "net/http"
+	"fmt"
+	"net/http"
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
-    fmt.Fprintf(w, "Based Go Microservice")
+	_, err := fmt.Fprintf(w, "Based Go Microservice")
+	if err != nil {
+		fmt.Println(err)
+	}
 }
-func main() {
-    port := 8080
-    serveString := ":" + string(rune(port))
-    http.HandleFunc("/", handler)
 
-    err := http.ListenAndServe(serveString, nil)
-    if err != nil {
-        panic(err)
-    }
+func main() {
+	dir := http.Dir("./static")
+	port := 8080
+	serveString := ":" + string(rune(port))
+	fileServer := http.FileServer(dir)
+	http.Handle("/", fileServer)
+	http.HandleFunc("/test", handler)
+
+	err := http.ListenAndServe(serveString, nil)
+	if err != nil {
+		panic(err)
+	}
 }
